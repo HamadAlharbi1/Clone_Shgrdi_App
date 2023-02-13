@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "267071370142",
+    "project_id": "project-3-hamad",
+    "storage_bucket": "project-3-hamad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267071370142:android:30e018009f9d55fed55c8f",
+        "android_client_info": {
+          "package_name": "com.example.wassel_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267071370142-o364kefaf8e8gi96np3nt05lad13k97l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPUqGtv-2Y93a-OIJiqvrccPZk6ABHnsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267071370142-o364kefaf8e8gi96np3nt05lad13k97l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
