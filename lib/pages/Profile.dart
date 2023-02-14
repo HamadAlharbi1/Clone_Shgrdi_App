@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'Login.dart';
+import 'help.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -20,12 +21,37 @@ class _ProfileState extends State<Profile> {
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(24),
-        child: Column(
+        child: ListView(
           children: [
             const SizedBox(
               height: 12,
             ),
-            //   Container(child: ,), صورة البروفيل
+            SizedBox(
+              height: 75,
+              child: Image.network('https://cdn-icons-png.flaticon.com/512/3135/3135715.png'),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  'email address :',
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Text(
+                  'a@ff.com',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            ),
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black),
@@ -58,7 +84,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             const SizedBox(
-              height: 12,
+              height: 24,
             ),
             Container(
               padding: const EdgeInsets.all(12),
@@ -109,7 +135,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             const SizedBox(
-              height: 12,
+              height: 24,
             ),
             Container(
               padding: const EdgeInsets.all(12),
@@ -143,37 +169,27 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             const SizedBox(
-              height: 12,
+              height: 24,
             ),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Icon(Icons.arrow_back_ios, color: Colors.white),
-                  Text(
-                    'اتصل بنا',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Icon(Icons.arrow_back_ios, color: Colors.white),
-                  Text(
-                    'اتصل بنا',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                  return const Help();
+                }));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Icon(Icons.arrow_back_ios, color: Colors.white),
+                    Text(
+                      'اتصل بنا',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -17,16 +19,17 @@ class Resturantdetails extends StatefulWidget {
 }
 
 class _ResturantdetailsState extends State<Resturantdetails> {
+  StreamSubscription? listener;
   List<Meal> meals = [];
   @override
   void initState() {
     super.initState();
-
+    listener?.cancel();
     listenToRestaurants();
   }
 
   listenToRestaurants() {
-    FirebaseFirestore.instance
+    listener ??= FirebaseFirestore.instance
         .collection('all_males')
         .where("resturant_id", isEqualTo: widget.value.id)
         .snapshots()
@@ -272,14 +275,16 @@ class _ResturantdetailsState extends State<Resturantdetails> {
                               style: const TextStyle(color: Colors.white),
                             ),
                           ),
-                          Container(
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black),
-                            child: const Icon(
-                              Icons.home,
-                              color: Colors.white,
-                            ),
-                          ),
+
+                          // Container(
+                          //   clipBehavior: Clip.hardEdge,
+                          //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black),
+                          //   child: const Icon(
+                          //     Icons.home,
+                          //     color: Colors.white,
+                          //   ),
+                          // ),
+
                           const SizedBox(
                             width: 12,
                           )
@@ -348,22 +353,42 @@ class _ResturantdetailsState extends State<Resturantdetails> {
                           )),
                 );
               },
-              child: Column(
-                children: [
-                  SizedBox(
-                      height: 200,
-                      child: Image.network(
-                        i.image,
-                        fit: BoxFit.cover,
-                      )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(i.price, style: const TextStyle(color: Colors.white, fontSize: 20)),
-                      Text(i.name, style: const TextStyle(color: Colors.white, fontSize: 20)),
-                    ],
-                  ),
-                ],
+              child: Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12), color: const Color.fromARGB(255, 23, 23, 23)),
+                child: Column(
+                  children: [
+                    SizedBox(
+                        height: 200,
+                        width: 300,
+                        child: Image.network(
+                          i.image,
+                          fit: BoxFit.cover,
+                        )),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Row(
+                          children: [
+                            Text(i.price, style: const TextStyle(color: Colors.white, fontSize: 20)),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            const Text('ريال', style: TextStyle(color: Colors.white, fontSize: 20)),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        SizedBox(child: Text(i.name, style: const TextStyle(color: Colors.white, fontSize: 20))),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
               ),
             )
         ],

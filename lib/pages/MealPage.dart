@@ -195,7 +195,8 @@ class _MealPageState extends State<MealPage> {
               onTap: (() {
                 setState(() {
                   // Meal.cart.add(widget.male);
-                  FirebaseFirestore.instance.collection('cart').add(widget.male.toMap());
+                  // FirebaseFirestore.instance.collection('cart').add(widget.male.toMap());
+                  FirebaseFirestore.instance.collection('cart').doc(widget.male.id).set(widget.male.toMap());
                 });
               }),
               child: Container(

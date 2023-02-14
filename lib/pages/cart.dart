@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../contents/constant/Modols.dart';
-import 'pay.dart';
+import 'pay_page.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -11,6 +12,26 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  List ChosenMeals = [];
+  @override
+  void initState() {
+    super.initState();
+    listenToRestaurants();
+  }
+
+  listenToRestaurants() {
+    FirebaseFirestore.instance.collection('cart').snapshots().listen((collection) {
+      List<Meal> newList = [];
+      for (final doc in collection.docs) {
+        final ChosenMeal = Meal.fromMap(doc.data());
+        newList.add(ChosenMeal);
+      }
+
+      ChosenMeals = newList;
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +46,10 @@ class _CartState extends State<Cart> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      Meal.cart.clear();
+                      // Meal.cart.add(widget.male);
+                      for (var meal in ChosenMeals) {
+                        FirebaseFirestore.instance.collection('cart').doc(meal.id).delete();
+                      }
                     });
                   },
                   child: const Text(
@@ -40,10 +64,15 @@ class _CartState extends State<Cart> {
                   'عربة التسوق',
                   style: TextStyle(color: Color.fromARGB(255, 121, 121, 121), fontSize: 32),
                 ),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 151, 151, 151))),
               ],
             ),
           ),
-          for (var meal in Meal.cart)
+          for (final meal in ChosenMeals)
             Column(
               children: [
                 for (var items in Data.W7)
@@ -60,9 +89,17 @@ class _CartState extends State<Cart> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              'X',
-                              style: TextStyle(fontSize: 20, color: Colors.grey),
+                            InkWell(
+                              onTap: (() {
+                                FirebaseFirestore.instance.collection('cart').doc(meal.id).delete();
+                                setState(() {
+                                  // Meal.cart.add(widget.male);
+                                });
+                              }),
+                              child: const Text(
+                                'X',
+                                style: TextStyle(fontSize: 20, color: Colors.grey),
+                              ),
                             ),
                             Row(
                               children: [
@@ -145,7 +182,8 @@ class _CartState extends State<Cart> {
                                   ),
                                   child: InkWell(
                                     onTap: (() {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Pay(male: meal)));
+                                      Navigator.push(
+                                          context, MaterialPageRoute(builder: (context) => const pay_page()));
                                     }),
                                     child: const Text(
                                       'الدفع',
@@ -192,11 +230,69 @@ class _CartState extends State<Cart> {
                         ),
                       ),
                     ]),
-                  )
+                  ),
+                // InkWell(
+                //   onTap: (() async {
+                //     List<Map<String, dynamic>> mealsToSave = [];
+                //     for (var meal in ChosenMeals) {
+                //       mealsToSave.add(meal.toMap());
+                //     }
+                //     await FirebaseFirestore.instance.collection('order').add({
+                //       'meals': mealsToSave,
+                //       'timestamp': Timestamp.now(),
+                //     });
+
+                //     for (var meal in ChosenMeals) {
+                //       await FirebaseFirestore.instance.collection('cart').doc(meal.id).delete();
+                //     }
+
+                //     setState(() {});
+                //   }),
+                // )
+
+                InkWell(
+                  onTap: (() {
+                    FirebaseFirestore.instance.collection('order').doc(meal.id).set(meal.toMap());
+
+                    for (var meal in ChosenMeals) {
+                      FirebaseFirestore.instance.collection('cart').doc(meal.id).delete();
+                    }
+
+                    setState(() {});
+                  }),
+                  child: const Text(
+                    'اضافة الى قائمة الطلبات ',
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 12,
+                )
               ],
             )
         ],
       ),
+    );
+  }
+}
+
+class Order {
+  final List<Meal> meal;
+
+  const Order({
+    required this.meal,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'meals': meal.map((m) => m.toMap()).toList(),
+    };
+  }
+
+  factory Order.fromMap(Map<String, dynamic> map) {
+    return Order(
+      meal: (map['meals'] as List).map((e) => Meal.fromMap(e)).toList(),
     );
   }
 }

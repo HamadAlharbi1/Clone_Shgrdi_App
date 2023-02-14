@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wassel_app/contents/constant/Modols.dart';
@@ -13,15 +15,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  StreamSubscription? listener;
   List<Restuarant> restaurants = [];
   @override
   void initState() {
+    listener?.cancel();
     super.initState();
     listenToRestaurants();
   }
 
   listenToRestaurants() {
-    FirebaseFirestore.instance.collection('restaurant').snapshots().listen((collection) {
+    listener ??= FirebaseFirestore.instance.collection('restaurant').snapshots().listen((collection) {
       List<Restuarant> newList = [];
       for (final doc in collection.docs) {
         final restaurant = Restuarant.fromMap(doc.data());
